@@ -1,0 +1,154 @@
+#define FILTERED_AUDIOLINK_WIDTH 16
+
+#define AL_CHRONO_INCREASE 0
+#define AL_CHRONO_INCREASE_FILTERED 1
+#define AL_CHRONO_INTENSITY 2
+#define AL_CHRONO_INTENSITY_FILTERED 3
+#define AL_CHRONO_LOW_ADVANCE 4
+#define AL_CHRONO_LOW_ADVANCE_FILTERED 5
+#define AL_CHRONO_HIGH_ADVANCE 6
+#define AL_CHRONO_HIGH_ADVANCE_FILTERED 7
+
+float GetAudioLinkBass()
+{
+    return AudioLinkData(ALPASS_AUDIOBASS).r;
+}
+
+float GetAudioLinkBass(float historicPoint)
+{
+    historicPoint = clamp(historicPoint, 0, 1);
+    return AudioLinkLerp(ALPASS_AUDIOBASS + float2(historicPoint * AUDIOLINK_WIDTH, 0)).r;
+}
+
+float GetAudioLinkFilteredBass()
+{
+    return AudioLinkData(ALPASS_FILTEREDAUDIOLINK).r;
+}
+
+float GetAudioLinkFilteredBass(float updateSpeed)
+{
+    updateSpeed = clamp(updateSpeed, 0, 1);
+    return AudioLinkLerp(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, 0)).r;
+}
+
+float GetAudioLinkLowMids()
+{
+    return AudioLinkData(ALPASS_AUDIOLOWMIDS).r;
+}
+
+float GetAudioLinkLowMids(float historicPoint)
+{
+    historicPoint = clamp(historicPoint, 0, 1);
+    return AudioLinkLerp(ALPASS_AUDIOLOWMIDS + float2(historicPoint * AUDIOLINK_WIDTH, 0)).r;
+}
+
+float GetAudioLinkFilteredLowMids()
+{
+    return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + uint2(0, 1)).r;
+}
+
+float GetAudioLinkFilteredLowMids(float updateSpeed)
+{
+    updateSpeed = clamp(updateSpeed, 0, 1);
+    return AudioLinkLerp(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, 1)).r;
+}
+
+float GetAudioLinkHighMids()
+{
+    return AudioLinkData(ALPASS_AUDIOHIGHMIDS).r;
+}
+
+float GetAudioLinkHighMids(float historicPoint)
+{
+    historicPoint = clamp(historicPoint, 0, 1);
+    return AudioLinkLerp(ALPASS_AUDIOHIGHMIDS + float2(historicPoint * AUDIOLINK_WIDTH, 0)).r;
+}
+
+float GetAudioLinkFilteredHighMids()
+{
+    return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + uint2(0, 2)).r;
+}
+
+float GetAudioLinkFilteredHighMids(float updateSpeed)
+{
+    updateSpeed = clamp(updateSpeed, 0, 1);
+    return AudioLinkLerp(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, 2)).r;
+}
+
+float GetAudioLinkTremble()
+{
+    return AudioLinkData(ALPASS_AUDIOTREBLE).r;
+}
+
+float GetAudioLinkTremble(float historicPoint)
+{
+    historicPoint = clamp(historicPoint, 0, 1);
+    return AudioLinkLerp(ALPASS_AUDIOTREBLE + float2(historicPoint * AUDIOLINK_WIDTH, 0)).r;
+}
+
+float GetAudioLinkFilteredTremble()
+{
+    return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + uint2(0, 3)).r;
+}
+
+float GetAudioLinkFilteredTremble(float updateSpeed)
+{
+    updateSpeed = clamp(updateSpeed, 0, 1);
+    return AudioLinkLerp(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, 3)).r;
+}
+
+float GetAudioLinkChannel(uint channel)
+{
+    channel = clamp(channel, 0, 3);
+    return AudioLinkData(ALPASS_AUDIOLINK + uint2(0, channel)).r;
+}
+
+float GetAudioLinkChannel(uint channel, float historicPoint)
+{
+    channel = clamp(channel, 0, 3);
+    return AudioLinkLerp(ALPASS_AUDIOLINK + float2(historicPoint * AUDIOLINK_WIDTH, channel)).r;
+}
+
+float GetAudioLinkFilteredChannel(uint channel)
+{
+    channel = clamp(channel, 0, 3);
+    return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + uint2(0, channel)).r;
+}
+
+float GetAudioLinkFilteredChannel(uint channel, float updateSpeed)
+{
+    channel = clamp(channel, 0, 3);
+    return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, channel)).r;
+}
+
+float4 GetAudioLinkIntensity()
+{
+    return AudioLinkData(ALPASS_GENERALVU  + uint2(8, 0));
+}
+
+float4 GetAudioLinkIntensity(float speed)
+{
+    speed = clamp(speed, 0, 1);
+    return AudioLinkData(ALPASS_FILTEREDVU + uint2(speed * 4, 0));
+}
+
+float3 GetAudioLinkColor(uint index)
+{
+    return AudioLinkData( ALPASS_CCCOLORS + uint2(index + 1, 0)).rgb;
+}
+
+float GetAudioLinkChronoValue(uint chronoMode, float channel, float speed, float maxValue)
+{
+    chronoMode = clamp(chronoMode, 0, 7);
+    channel = clamp(channel, 0, 3);
+    float baseValue = 1000000;
+    float reminder = baseValue/speed;
+    float divider =  reminder/ maxValue;
+    return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY  + uint2(chronoMode, channel)) % reminder) / divider;
+}
+
+float GetAudioLinkChronoValue(uint chronoMode, float channel, float speed)
+{
+    return GetAudioLinkChronoValue(chronoMode, channel, speed, 1);
+}
+

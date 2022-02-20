@@ -1,0 +1,9 @@
+{
+    "Properties": [
+        {
+            "Name": "Enable AudioLink support",
+            "DisplayName": "Enable AudioLink support",
+            "Tooltip": "Enable support for audiolink related features\n\nMust be toggled on to be able to use AudioLink"
+        }
+    ]
+}
