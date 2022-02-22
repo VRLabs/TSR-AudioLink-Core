@@ -118,6 +118,7 @@ float GetAudioLinkFilteredChannel(uint channel)
 float GetAudioLinkFilteredChannel(uint channel, float updateSpeed)
 {
     channel = clamp(channel, 0, 3);
+    updateSpeed = clamp(updateSpeed, 0, 1);
     return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, channel)).r;
 }
 
@@ -129,7 +130,7 @@ float4 GetAudioLinkIntensity()
 float4 GetAudioLinkIntensity(float speed)
 {
     speed = clamp(speed, 0, 1);
-    return AudioLinkData(ALPASS_FILTEREDVU + uint2(speed * 4, 0));
+    return AudioLinkData(ALPASS_FILTEREDVU_INTENSITY + uint2(speed * 4, 0));
 }
 
 float3 GetAudioLinkColor(uint index)
@@ -142,13 +143,32 @@ float GetAudioLinkChronoValue(uint chronoMode, float channel, float speed, float
     chronoMode = clamp(chronoMode, 0, 7);
     channel = clamp(channel, 0, 3);
     float baseValue = 1000000;
-    float reminder = baseValue/speed;
-    float divider =  reminder/ maxValue;
+    float reminder = baseValue / speed;
+    float divider =  reminder / maxValue;
     return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY  + uint2(chronoMode, channel)) % reminder) / divider;
 }
 
 float GetAudioLinkChronoValue(uint chronoMode, float channel, float speed)
 {
     return GetAudioLinkChronoValue(chronoMode, channel, speed, 1);
+}
+float _ALSampleSpeed;
+float _ALColorIndex;
+float audioLinkFloats[8];
+float3 audioLinkColor;
+
+void SetupAudioLinkValues()
+{
+    audioLinkFloats[0] = GetAudioLinkFilteredChannel(0, _ALSampleSpeed);
+    audioLinkFloats[1] = GetAudioLinkFilteredChannel(1, _ALSampleSpeed);
+    audioLinkFloats[2] = GetAudioLinkFilteredChannel(2, _ALSampleSpeed);
+    audioLinkFloats[3] = GetAudioLinkFilteredChannel(3, _ALSampleSpeed);
+    float4 intensity = GetAudioLinkIntensity();
+    audioLinkFloats[4] = intensity.r;
+    audioLinkFloats[5] = intensity.g;
+    audioLinkFloats[6] = intensity.b;
+    audioLinkFloats[7] = intensity.a;
+    
+    audioLinkColor = GetAudioLinkColor(_ALColorIndex);
 }
 
