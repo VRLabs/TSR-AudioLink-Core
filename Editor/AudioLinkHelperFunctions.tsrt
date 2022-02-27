@@ -118,7 +118,7 @@ float GetAudioLinkFilteredChannel(uint channel)
 float GetAudioLinkFilteredChannel(uint channel, float updateSpeed)
 {
     channel = clamp(channel, 0, 3);
-    updateSpeed = clamp(updateSpeed, 0, 1);
+    updateSpeed = clamp(updateSpeed, 0, 0.9999);
     return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + float2(updateSpeed * FILTERED_AUDIOLINK_WIDTH, channel)).r;
 }
 
@@ -154,21 +154,21 @@ float GetAudioLinkChronoValue(uint chronoMode, float channel, float speed)
 }
 float _ALSampleSpeed;
 float _ALColorIndex;
-float audioLinkFloats[8];
-float3 audioLinkColor;
+float AudioLinkFloats[8];
+float3 AudioLinkColor;
 
 void SetupAudioLinkValues()
 {
-    audioLinkFloats[0] = GetAudioLinkFilteredChannel(0, _ALSampleSpeed);
-    audioLinkFloats[1] = GetAudioLinkFilteredChannel(1, _ALSampleSpeed);
-    audioLinkFloats[2] = GetAudioLinkFilteredChannel(2, _ALSampleSpeed);
-    audioLinkFloats[3] = GetAudioLinkFilteredChannel(3, _ALSampleSpeed);
+    AudioLinkFloats[0] = GetAudioLinkFilteredChannel(0, _ALSampleSpeed);
+    AudioLinkFloats[1] = GetAudioLinkFilteredChannel(1, _ALSampleSpeed);
+    AudioLinkFloats[2] = GetAudioLinkFilteredChannel(2, _ALSampleSpeed);
+    AudioLinkFloats[3] = GetAudioLinkFilteredChannel(3, _ALSampleSpeed);
     float4 intensity = GetAudioLinkIntensity();
-    audioLinkFloats[4] = intensity.r;
-    audioLinkFloats[5] = intensity.g;
-    audioLinkFloats[6] = intensity.b;
-    audioLinkFloats[7] = intensity.a;
+    AudioLinkFloats[4] = intensity.r;
+    AudioLinkFloats[5] = intensity.g;
+    AudioLinkFloats[6] = intensity.b;
+    AudioLinkFloats[7] = intensity.a;
     
-    audioLinkColor = GetAudioLinkColor(_ALColorIndex);
+    AudioLinkColor = GetAudioLinkColor(_ALColorIndex);
 }
 
