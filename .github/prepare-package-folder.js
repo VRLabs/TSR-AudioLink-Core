@@ -50,12 +50,12 @@ try {
         fs.mkdirSync(data['destination-folder'], { recursive: true });
 
         data['extra-generated-meta'].forEach(element => {
-            fs.mkdirSync(element.path, { recursive: true });
-            fs.writeFileSync(element.path + ".meta", "fileFormatVersion: 2\nguid: " + element.guid + "\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: ");
+            fs.mkdirSync("tmp/" + element.path, { recursive: true });
+            fs.writeFileSync("tmp/" + element.path + ".meta", "fileFormatVersion: 2\nguid: " + element.guid + "\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: ");
         });
 
         for(var i=0;i<files.length;i++){
-            if(!files[i].startsWith(".")) {
+            if(!path.basename(files[i]).startsWith(".")) {
                 fs.moveSync(files[i], data['destination-folder'] + "/" + files[i], function (err) {
                     if (err) throw err
                     console.log('moved files')
