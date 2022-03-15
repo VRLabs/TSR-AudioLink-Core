@@ -22,7 +22,7 @@ jobs:
       - name: Prepare Folder For Packaging
         run: |
           mkdir -p "tmp"
-          ls | xargs mv -t "tmp"
+          ls | grep -v "tmp" | xargs mv -t "tmp"
           npm install js-yaml
           npm install fs-extra
           node .github/prepare-package-folder.js
