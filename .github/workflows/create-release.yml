@@ -1,0 +1,55 @@
+name: create-release
+on:
+  push:
+    tags:
+      - "*.*.*"
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+      - name: Update version number
+        run: |
+          node .github/update-version-number.js ${{ env.SOURCE_TAG }}
+          echo "${{ env.SOURCE_TAG }}" > Editor/Resources/TSR/VERSION.txt
+      - name: Prepare Folder For Packaging
+        run: |
+          npm install js-yaml
+          npm install fs-extra
+          node .github/prepare-package-folder.js
+      - name: Create UnityPackage
+        env:
+          SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+        uses: FrostBanditTeam/extract-unity-package-action@1
+        with:
+          outputPackagePath: 'TSR.AudioLink.Core.${{ env.SOURCE_TAG }}.unitypackage'
+          unityProjectPath: '.'
+
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v1
+        with:
+          configuration: ".github/release-notes-configuration.json"
+          outputFile: "releaseNotes.txt"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: "TSR AudioLink Core ${{ env.SOURCE_TAG }}"
+          body_path: "releaseNotes.txt"
+          files: |
+            TSR.AudioLink.Core.${{ env.SOURCE_TAG }}.unitypackage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
