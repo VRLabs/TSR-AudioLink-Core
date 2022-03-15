@@ -21,8 +21,8 @@ jobs:
           node .github/update-version-number.js ${{ env.SOURCE_TAG }}
       - name: Prepare Folder For Packaging
         run: |
-          npm install js-yaml
-          npm install fs-extra
+          npm install -g js-yaml
+          npm install -g fs-extra
           node .github/prepare-package-folder.js
       - name: Create UnityPackage
         env:
