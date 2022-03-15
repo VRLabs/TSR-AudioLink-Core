@@ -45,7 +45,7 @@ try {
 
         console.log("   Using folder: " + data['destination-folder']);
 
-        var files=fs.readdirSync(".");
+        var files=fs.readdirSync("tmp");
 
         fs.mkdirSync(data['destination-folder'], { recursive: true });
 

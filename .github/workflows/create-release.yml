@@ -32,7 +32,7 @@ jobs:
         uses: FrostBanditTeam/extract-unity-package-action@1
         with:
           outputPackagePath: 'TSR.AudioLink.Core.${{ env.SOURCE_TAG }}.unitypackage'
-          unityProjectPath: '.'
+          unityProjectPath: 'tmp'
 
       - name: Build Changelog
         id: build_changelog
