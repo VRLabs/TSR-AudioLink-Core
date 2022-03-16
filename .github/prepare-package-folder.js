@@ -47,7 +47,7 @@ try {
 
         var files=fs.readdirSync("tmp");
 
-        fs.mkdirSync(data['destination-folder'], { recursive: true });
+        fs.mkdirSync("tmp/" + data['destination-folder'], { recursive: true });
 
         data['extra-generated-meta'].forEach(element => {
             fs.mkdirSync("tmp/" + element.path, { recursive: true });
@@ -56,7 +56,7 @@ try {
 
         for(var i=0;i<files.length;i++){
             if(!path.basename(files[i]).startsWith(".")) {
-                fs.moveSync(files[i], data['destination-folder'] + "/" + files[i], function (err) {
+                fs.moveSync("tmp/" + files[i], "tmp/" + data['destination-folder'] + "/" + files[i], function (err) {
                     if (err) throw err
                     console.log('moved files')
                 });
