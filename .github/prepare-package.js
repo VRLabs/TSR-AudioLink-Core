@@ -6,7 +6,7 @@ const exec = require('child_process').execSync;
 try {
 
     if (!fs.existsSync(".github/package-info.yml")){
-        console.log("echo \"::error file=prepare-package.js::'package-info.yml' not found, cannot proceed\"");
+        console.log("::error file=prepare-package.js::'package-info.yml' not found, cannot proceed");
         return;
     }
     else
@@ -15,13 +15,13 @@ try {
         let data = yaml.load(fileContents);
 
         if(!data['package-name'] || !data['visual-name']) {
-            console.log("echo \"::error file=prepare-package.js::'package-name' or 'visual-name' missing from 'package-info.yml' not found, cannot proceed\"");
+            console.log("::error file=prepare-package.js::'package-name' or 'visual-name' missing from 'package-info.yml' not found, cannot proceed");
         }
 
-        console.log("echo '::echo::on'");
-        console.log('echo "::set-output name=PACKAGE_NAME::' + data['package-name'] + '"');
-        console.log('echo "::set-output name=VISUAL_NAME::' + data['visual-name'] + '"');
-        console.log("echo '::echo::off'");
+        console.log("::echo::on");
+        console.log('::set-output name=PACKAGE_NAME::' + data['package-name']);
+        console.log('::set-output name=VISUAL_NAME::' + data['visual-name']);
+        console.log("::echo::off");
 
         if(!data['destination-folder'] || !data['extra-generated-meta']) {
             console.log("Extra folders not found, using the root");
