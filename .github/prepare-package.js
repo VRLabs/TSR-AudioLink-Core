@@ -17,11 +17,9 @@ try {
         if(!data['package-name'] || !data['visual-name']) {
             console.log("::error file=prepare-package.js::'package-name' or 'visual-name' missing from 'package-info.yml' not found, cannot proceed");
         }
-
-        console.log("::echo::on");
+        
         console.log('::set-output name=PACKAGE_NAME::' + data['package-name']);
         console.log('::set-output name=VISUAL_NAME::' + data['visual-name']);
-        console.log("::echo::off");
 
         if(!data['destination-folder'] || !data['extra-generated-meta']) {
             console.log("Extra folders not found, using the root");
