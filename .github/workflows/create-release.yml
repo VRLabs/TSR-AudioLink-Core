@@ -20,6 +20,7 @@ jobs:
         run: |
           node .github/update-version-number.js ${{ env.SOURCE_TAG }}
       - name: Prepare For Packaging
+        id: prep
         run: |
           mkdir -p "tmp"
           ls | grep -v "tmp" | xargs mv -t "tmp"
@@ -29,6 +30,7 @@ jobs:
       - name: Create UnityPackage
         env:
           SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+          PACKAGE_NAME: ${{ steps.prep.outputs.PACKAGE_NAME }}
         uses: FrostBanditTeam/extract-unity-package-action@1
         with:
           outputPackagePath: '${{ env.PACKAGE_NAME}}.${{ env.SOURCE_TAG }}.unitypackage'
@@ -54,3 +56,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+          VISUAL_NAME: ${{ steps.prep.outputs.VISUAL_NAME }}
+          PACKAGE_NAME: ${{ steps.prep.outputs.PACKAGE_NAME }}
