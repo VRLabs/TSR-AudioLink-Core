@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: VRLabs.TSR.AudioLink.Core
   Name: AudioLink Core
-  Version: 0.2.7
+  Version: master
   Author: VRLabs
   Description: Adds the core functions and hooks needed for audiolink related features
   EnableProperties:

@@ -40,7 +40,7 @@ jobs:
 
       - name: Build Changelog
         id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v1
+        uses: mikepenz/release-changelog-builder-action@v2
         with:
           configuration: ".github/release-notes-configuration.json"
           outputFile: "releaseNotes.txt"
