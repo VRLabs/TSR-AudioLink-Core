@@ -15,8 +15,8 @@ try {
         let data = yaml.load(fileContents);
 
         console.log("   Using folder: " + data['destination-folder']);
-        exec('echo ::set-output name=PACKAGE_NAME::' + data['package-name']);
-        exec('echo ::set-output name=VISUAL_NAME::' + data['visual-name']);
+        exec('echo "::set-output name=PACKAGE_NAME::' + data['package-name'] + '"');
+        exec('echo "::set-output name=VISUAL_NAME::' + data['visual-name'] + '"');
 
         var files=fs.readdirSync("tmp");
 
