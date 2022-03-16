@@ -1,4 +1,6 @@
-﻿destination-folder: Assets/VRLabs/Toony Standard Rebuild Modules/TSR AudioLink Core
+﻿package-name: TSR.AudioLink.Core
+visual-name: TSR AudioLink Core
+destination-folder: Assets/VRLabs/Toony Standard Rebuild Modules/TSR AudioLink Core
 extra-generated-meta:
   - path: Assets/VRLabs
     guid: 652a1ba5b00554143bc9a76307dbc4e8
