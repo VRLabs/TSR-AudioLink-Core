@@ -5,8 +5,9 @@ const exec = require('child_process').execSync;
 
 try {
 
-    if (!fs.existsSync(".github/package-extra-folders.yml")){
-        console.log("Extra folders not found, using the root");
+    if (!fs.existsSync(".github/package-info.yml")){
+        console.log("echo \"::error 'package-info.yml' not found, cannot proceed\"");
+        return;
     }
     else
     {
@@ -14,9 +15,18 @@ try {
         let fileContents = fs.readFileSync('.github/package-info.yml', 'utf8');
         let data = yaml.load(fileContents);
 
-        console.log("   Using folder: " + data['destination-folder']);
+        if(!data['package-name'] || !data['visual-name']) {
+            console.log("echo \"::error 'package-name' or 'visual-name' missing from 'package-info.yml' not found, cannot proceed\"");
+        }
+
         exec('echo "::set-output name=PACKAGE_NAME::' + data['package-name'] + '"');
         exec('echo "::set-output name=VISUAL_NAME::' + data['visual-name'] + '"');
+
+        if(!data['destination-folder'] || !data['extra-generated-meta']) {
+            console.log("Extra folders not found, using the root");
+            return;
+        }
+        console.log("Using folder: " + data['destination-folder']);
 
         var files=fs.readdirSync("tmp");
 
